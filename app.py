@@ -9,10 +9,10 @@ from sklearn.metrics.pairwise import cosine_similarity
 import networkx as nx
 import os
 import PyPDF2
-import docx
+from docx import Document
 from werkzeug.utils import secure_filename
 
-app = Flask(__name__, static_folder='')
+app = Flask(__name__, static_folder='.')
 CORS(app)
 
 # Configure upload settings
@@ -26,7 +26,7 @@ if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
 # Maximum word limit
-MAX_WORDS = 1000  # Changed from 1500 to 1000
+MAX_WORDS = 1000
 
 # Check if file extension is allowed
 def allowed_file(filename):
@@ -48,7 +48,7 @@ def extract_text_from_pdf(file_path):
 # Extract text from Word document
 def extract_text_from_docx(file_path):
     try:
-        doc = docx.Document(file_path)
+        doc = Document(file_path)
         text = ""
         for paragraph in doc.paragraphs:
             text += paragraph.text + " "
@@ -190,20 +190,26 @@ def summarize_text(text, algorithm='hybrid', sentences_count=5):
     
     return summary
 
+# Frontend file serving routes
 @app.route('/')
-def serve_frontend():
-    return send_from_directory(app.static_folder, 'index.html')
+def serve_index():
+    return send_from_directory('.', 'index.html')
 
-@app.route('/<path:path>')
-def serve_static_files(path):
-    return send_from_directory(app.static_folder, path)
+@app.route('/style.css')
+def serve_css():
+    return send_from_directory('.', 'style.css')
 
+@app.route('/script.js')
+def serve_js():
+    return send_from_directory('.', 'script.js')
+
+# API routes
 @app.route('/summarize', methods=['POST'])
 def summarize():
     try:
         data = request.get_json()
         text = data.get('text', '')
-        sentences_count = min(int(data.get('sentences_count', 5)), 20)  # Limit to 20 sentences
+        sentences_count = min(int(data.get('sentences_count', 5)), 20)
         algorithm = data.get('algorithm', 'hybrid')
         
         if not text:
