@@ -198,12 +198,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 formData.append('sentences_count', count);
                 formData.append('algorithm', algo);
 
-                response = await fetch('http://localhost:5000/summarize-document', {
+                response = await fetch('/summarize-document', {
                     method: 'POST',
                     body: formData
                 });
             } else {
-                response = await fetch('http://localhost:5000/summarize', {
+                response = await fetch('/summarize', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } catch (error) {
             console.error('Error:', error);
-            showError('Error connecting to the server. Make sure the backend is running on port 5000.');
+            showError('Error connecting to the server. Please try again.');
         } finally {
             loading.style.display = 'none';
         }
