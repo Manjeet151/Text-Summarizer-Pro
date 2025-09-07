@@ -12,7 +12,7 @@ import PyPDF2
 from docx import Document
 from werkzeug.utils import secure_filename
 
-app = Flask(__name__, static_folder='.')
+app = Flask(__name__, static_folder='.', static_url_path='')
 CORS(app)
 
 # Configure upload settings
@@ -190,7 +190,7 @@ def summarize_text(text, algorithm='hybrid', sentences_count=5):
     
     return summary
 
-# Frontend file serving routes
+# Static file serving routes
 @app.route('/')
 def serve_index():
     return send_from_directory('.', 'index.html')
