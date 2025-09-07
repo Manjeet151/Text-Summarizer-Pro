@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Summarizer Pro</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-file-alt"></i>
+                <h1>Pro Summarizer </h1>
+            </div>
+            <p>Natural Language Processing (NLP)-based text summarization leveraging advanced machine learning algorithms</p>
+        </header>
+
+        <div class="main-content">
+            <div class="input-section card">
+                <h2><i class="fas fa-keyboard"></i> Input Text</h2>
+                
+                <!-- Document Upload Section -->
+                <div class="upload-section">
+                    <div class="upload-header">
+                        <h3><i class="fas fa-file-upload"></i> Upload Document</h3>
+                        <div class="file-types">
+                            <span class="file-type-tag">PDF</span>
+                            <span class="file-type-tag">DOCX</span>
+                            <span class="file-type-tag">TXT</span>
+                        </div>
+                    </div>
+                    
+                    <div class="upload-area" id="upload-area">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Drag & drop your file here</p>
+                        <span class="upload-or">or</span>
+                        <label for="file-input" class="file-input-label">
+                            <i class="fas fa-folder-open"></i> Browse Files
+                        </label>
+                        <input type="file" id="file-input" accept=".pdf,.docx,.txt" hidden>
+                        <p class="upload-note">Max file size: 16MB</p>
+                        <p class="upload-note">Max Words: 1000</p>
+                    </div>
+                    
+                    <div class="uploaded-file" id="uploaded-file" style="display: none;">
+                        <div class="file-info">
+                            <i class="fas fa-file"></i>
+                            <div class="file-details">
+                                <span class="file-name" id="uploaded-file-name"></span>
+                                <span class="file-size" id="uploaded-file-size"></span>
+                            </div>
+                        </div>
+                        <button class="remove-file-btn" id="remove-file-btn">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="divider">
+                    <span>OR</span>
+                </div>
+                
+                <div class="textarea-container">
+                    <textarea id="input-text" placeholder="Paste or type your text here..."></textarea>
+                    <div class="word-count">
+                        <span id="word-count">0</span> words
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="sentences-count"><i class="fas fa-text-width"></i> Summary Length:</label>
+                        <div class="slider-container">
+                            <input type="range" id="sentences-count" min="1" max="10" value="5">
+                            <span id="sentences-value">5 sentences</span>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="algorithm"><i class="fas fa-brain"></i> Algorithm:</label>
+                        <div class="select-wrapper">
+                            <select id="algorithm">
+                                <option value="hybrid">Hybrid (Recommended)</option>
+                                <option value="tfidf">TF-IDF</option>
+                                <option value="textrank">TextRank</option>
+                                <option value="lsa">LSA</option>
+                                <option value="position">Position-based</option>
+                            </select>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    
+                    <button id="summarize-btn" class="primary-btn">
+                        <i class="fas fa-rocket"></i> Generate Summary
+                    </button>
+                </div>
+            </div>
+
+            <div class="output-section card">
+                <h2><i class="fas fa-file-contract"></i> Summary</h2>
+                <div id="summary-output" class="summary-placeholder">
+                    <div class="placeholder-content">
+                        <i class="fas fa-lightbulb"></i>
+                        <p>Your summary will appear here</p>
+                    </div>
+                </div>
+                
+                <div class="stats" id="stats">
+                    <div class="stat">
+                        <div class="stat-icon">
+                            <i class="fas fa-file"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">Original Text</span>
+                            <span class="stat-value" id="original-length">- words</span>
+                        </div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-icon">
+                            <i class="fas fa-compress-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">Summary</span>
+                            <span class="stat-value" id="summary-length">- words</span>
+                        </div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-label">Reduction</span>
+                            <span class="stat-value" id="reduction">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="algorithm-info card">
+            <h3><i class="fas fa-info-circle"></i> Algorithm Information</h3>
+            <div class="algo-details">
+                <div class="algo active" data-algo="hybrid">
+                    <h4>Hybrid Algorithm</h4>
+                    <p>Combines TF-IDF, TextRank, and position-based scoring for optimal results.</p>
+                </div>
+                <div class="algo" data-algo="tfidf">
+                    <h4>TF-IDF</h4>
+                    <p>Measures word importance based on frequency in document vs. corpus.</p>
+                </div>
+                <div class="algo" data-algo="textrank">
+                    <h4>TextRank</h4>
+                    <p>Graph-based algorithm that ranks sentences by similarity connections.</p>
+                </div>
+                <div class="algo" data-algo="lsa">
+                    <h4>LSA</h4>
+                    <p>Latent Semantic Analysis identifies patterns and relationships in text.</p>
+                </div>
+                <div class="algo" data-algo="position">
+                    <h4>Position-based</h4>
+                    <p>Weights sentences based on their position in the document.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner-container">
+                <div class="spinner"></div>
+                <p>Processing your text with <span id="current-algorithm">Hybrid</span> algorithm...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
