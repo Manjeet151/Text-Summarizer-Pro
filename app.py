@@ -12,7 +12,7 @@ import PyPDF2
 import docx
 from werkzeug.utils import secure_filename
 
-app = Flask(__name__, static_folder='../frontend')
+app = Flask(__name__, static_folder='')
 CORS(app)
 
 # Configure upload settings
