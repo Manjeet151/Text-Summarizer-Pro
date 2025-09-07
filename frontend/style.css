@@ -333,7 +333,7 @@ label i {
 
 input[type="range"] {
     flex: 1;
-    -webkit-appearance: none;
+    -webkitappearance: none;
     height: 8px;
     background: #e0e0e0;
     border-radius: 5px;
